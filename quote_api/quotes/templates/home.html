@@ -1,51 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote Generator</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 500px;
-        }
-
-        #quote-text {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        #quote-author {
-            color: gray;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #007BFF;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
@@ -72,67 +32,6 @@
         <button id="fechar-popup">close</button>
     </dialog>
 
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
-<script>
-    /*frase random*/
-    const quoteText = document.getElementById('quote-text');
-    const quoteAuthor = document.getElementById('quote-author');
-
-    document.getElementById('new-quote-btn').addEventListener('click', function() {
-        quoteText.textContent = 'Carregando...';
-        quoteAuthor.textContent = '';
-        fetch('/quotes/random/')
-            .then(response => response.json())
-            .then(data => {
-                quoteText.textContent = data.text;
-                if (data.author) {
-                    quoteAuthor.textContent = `- ${data.author}`;
-                } else {
-                    quoteAuthor.textContent = '';
-                }
-            })
-            .catch(error => console.error('Erro ao buscar a frase:', error));
-    });
-
-    /*criar nova frase*/
-    const newQuoteText = document.getElementById('new-quote-text');
-    const newQuoteAuthor = document.getElementById('new-quote-author');
-    const newQuoteCategory = document.getElementById('new-quote-category');
-
-    document.getElementById('add-quote-btn').addEventListener('click', function() {
-        fetch('/quotes/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                text: newQuoteText.value,
-                author: newQuoteAuthor.value,
-                category:newQuoteCategory.value
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao criar frase");
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('quote-success').showModal();
-
-            // limpa os campos
-            newQuoteText.value = '';
-            newQuoteAuthor.value = '';
-            newQuoteCategory.value = '';
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
-
-    });
-
-    document.getElementById('fechar-popup').addEventListener('click', () =>{
-        document.getElementById('quote-success').close()
-    })
-</script>
 </html>
