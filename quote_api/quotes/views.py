@@ -21,3 +21,16 @@ class QuoteListCreate(APIView):
         
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST) 
+
+class QuoteRandomView(APIView):
+
+    def get(self, request):
+        quote = Quote.objects.order_by('?').first()
+        
+
+        if quote:
+            serializer = QuoteSerializer(quote)
+            return Response(serializer.data, status.HTTP_200_OK)
+        
+        else:
+            return Response({'error': 'No quotes available'}, status.HTTP_404_NOT_FOUND)
