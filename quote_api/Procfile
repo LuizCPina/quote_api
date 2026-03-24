@@ -1,1 +1,1 @@
-web: gunicorn QuoteGenerator.wsgi
+web: gunicorn quote_api.wsgi
