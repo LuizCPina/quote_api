@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Generator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        #quote-text {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        #quote-author {
+            color: gray;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="quote-text">Clique no botão para gerar uma frase</h1>
+        <p id="quote-author"></p>
+        <button id="new-quote-btn">Nova frase</button>
+    </div>
+
+</body>
+<script>
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+
+    document.getElementById('new-quote-btn').addEventListener('click', function() {
+        quoteText.textContent = 'Carregando...';
+        quoteAuthor.textContent = '';
+        fetch('/quotes/random/')
+            .then(response => response.json())
+            .then(data => {
+                quoteText.textContent = data.text;
+                if (data.author) {
+                    quoteAuthor.textContent = `- ${data.author}`;
+                } else {
+                    quoteAuthor.textContent = '';
+                }
+            })
+            .catch(error => console.error('Erro ao buscar a frase:', error));
+    });
+</script>
+</html>

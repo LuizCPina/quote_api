@@ -42,3 +42,6 @@ class QuoteDetailView(APIView):
             quote = get_object_or_404(Quote, id=id)
             serializer = QuoteSerializer(quote)
             return Response(serializer.data, status.HTTP_200_OK)
+    
+def home(request):
+    return render(request, 'home.html')
