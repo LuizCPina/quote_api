@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .serializers import QuoteSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,3 +34,11 @@ class QuoteRandomView(APIView):
         
         else:
             return Response({'error': 'No quotes available'}, status.HTTP_404_NOT_FOUND)
+        
+
+class QuoteDetailView(APIView):
+
+    def get(self, request, id):
+            quote = get_object_or_404(Quote, id=id)
+            serializer = QuoteSerializer(quote)
+            return Response(serializer.data, status.HTTP_200_OK)
