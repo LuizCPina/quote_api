@@ -55,8 +55,26 @@
         <button id="new-quote-btn">Nova frase</button>
     </div>
 
+    <div class="container">
+        <input type="text" id="new-quote-text" placeholder="Frase">
+        <input type="text" id="new-quote-author" placeholder="Autor da frase">
+        <select id="new-quote-category" name="category" required>
+            <option value="">Selecione uma categoria</option>
+            <option value="motivacional">Motivacional</option>
+            <option value="humor">Humor</option>
+            <option value="reflexiva">Reflexiva</option>
+            <option value="triste">Triste</option>
+        </select>
+        <button id="add-quote-btn">Criar nova frase</button>
+    </div>
+    <dialog id="quote-success">
+        <h2>Frase enviada com sucesso</h2>
+        <button id="fechar-popup">close</button>
+    </dialog>
+
 </body>
 <script>
+    /*frase random*/
     const quoteText = document.getElementById('quote-text');
     const quoteAuthor = document.getElementById('quote-author');
 
@@ -75,5 +93,46 @@
             })
             .catch(error => console.error('Erro ao buscar a frase:', error));
     });
+
+    /*criar nova frase*/
+    const newQuoteText = document.getElementById('new-quote-text');
+    const newQuoteAuthor = document.getElementById('new-quote-author');
+    const newQuoteCategory = document.getElementById('new-quote-category');
+
+    document.getElementById('add-quote-btn').addEventListener('click', function() {
+        fetch('/quotes/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: newQuoteText.value,
+                author: newQuoteAuthor.value,
+                category:newQuoteCategory.value
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao criar frase");
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('quote-sucess').showModal();
+
+            // limpa os campos
+            newQuoteText.value = '';
+            newQuoteAuthor.value = '';
+            newQuoteCategory.value = '';
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
+
+    });
+
+    document.getElementById('fechar-popup').addEventListener('click', () =>{
+        document.getElementById('quote-success').close()
+    })
 </script>
 </html>
