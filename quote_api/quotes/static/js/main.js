@@ -3,15 +3,18 @@
 /* FRASERANDOM */
 const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
+const quoteCategory = document.getElementById('quote-category');
 
 document.getElementById('new-quote-btn').addEventListener('click', () => {
     quoteText.textContent = 'Carregando...';
     quoteAuthor.textContent = '';
+    quoteCategory.textContent = '';
     fetch('/quotes/random/')
         .then(res => res.json())
         .then(data => {
             quoteText.textContent = data.text;
             quoteAuthor.textContent = data.author ? `- ${data.author}` : '';
+            quoteCategory.textContent = data.category ? `${data.category}` : '';
         })
         .catch(err => console.error('Erro ao buscar a frase:', err));
 });
