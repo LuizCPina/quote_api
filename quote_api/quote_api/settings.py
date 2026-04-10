@@ -78,8 +78,10 @@ WSGI_APPLICATION = 'quote_api.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://poker_db_mb4h_user:gd1ThREYP81XtgMO1jn1Sfot8sbiLARK@dpg-d7cips58nd3s73ep2fjg-a.virginia-postgres.render.com/poker_db_mb4h'
+    'default': dj_database_url.config(
+        default='postgresql://poker_db_mb4h_user:gd1ThREYP81XtgMO1jn1Sfot8sbiLARK@dpg-d7cips58nd3s73ep2fjg-a.virginia-postgres.render.com/poker_db_mb4h',
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 
@@ -118,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
